@@ -425,7 +425,10 @@ def _customer_lifetime_value(
     """
     df = pd.DataFrame(index=frequency.index)
     df['clv'] = 0  # initialize the clv column to zeros
+    steps = np.arange(1, time + 1)
+    factor = {"W": 4.345, "M": 1.0, "D": 30, "H": 30 * 24}[freq]
 
+    for i in steps * factor:
         # since the prediction of number of transactions is cumulative, we have to subtract off the previous periods
         expected_number_of_transactions = transaction_prediction_model.predict(
             i, frequency, recency, T
